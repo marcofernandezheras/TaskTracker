@@ -1,0 +1,128 @@
+<div class="flex-grow-1">
+    <div class="flex align-items-baseline justify-content-between">
+        @if(showCalendar){            
+            <p-calendar [ngModel]="currenDate()" (ngModelChange)="currenDate.set($event)" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>            
+        } @else {
+            <h4 class="m-0">{{currenDate() | date: 'dd/MM/yyyy'}}</h4>
+        }
+    </div>
+    <p-table #dt1 [value]="tareas" dataKey="id" editMode="row"
+        styleClass="p-datatable-striped p-datatable-sm p-datatable-gridlines w-full" [scrollable]="true" scrollHeight="flex">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 140px;">Ticket</th>
+                <th style="width: 140px;">Activo</th>
+                <th>Titulo</th>
+                <th style="width: 140px;">Tipo</th>
+                <th style="width: 95px;">Inicio</th>
+                <th style="width: 95px;">Fin</th>
+                <th style="width: 95px;">Pausa</th>
+                <th style="width: 70px;"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tarea let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="tarea">
+                @if(indexedDesarrollos[tarea.idDesarrollo])
+                {
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="desarrollos" [filter]="true" filterBy="ticket" appendTo="body" [(ngModel)]="tarea.idDesarrollo" optionValue="id" optionLabel="ticket" placeholder="Ticket"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{indexedDesarrollos[tarea.idDesarrollo].Desarrollo.ticket}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>{{indexedDesarrollos[tarea.idDesarrollo].Activo.name}}</td>
+                    <td>{{indexedDesarrollos[tarea.idDesarrollo].Desarrollo.title}}</td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="tipos" appendTo="body" [(ngModel)]="tarea.idTipoTarea" optionLabel="name" optionValue="id" placeholder="Tipo">
+                                    <ng-template pTemplate="selectedItem">
+                                        <p-badge [value]="indexedTipos[tarea.idTipoTarea]" [classList]="['badgeTarea'+tarea.idTipoTarea]"></p-badge>
+                                    </ng-template>
+                                    <ng-template let-tipo pTemplate="item">
+                                        <p-badge [value]="tipo.name" [classList]="['badgeTarea'+tipo.id]"></p-badge>
+                                    </ng-template>
+                                </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                <p-badge pInitEditableRow (click)="onRowEditInit(tarea)" [value]="indexedTipos[tarea.idTipoTarea]" [classList]="['badgeTarea'+tarea.idTipoTarea]"></p-badge>
+                            </ng-template>
+                        </p-cellEditor>                        
+                    </td>
+                    <td class="text-center">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar [style]="{ width: '80px' }" (onInput)="blurDate($event)" [(ngModel)]="clonedTareas[tarea.id].editTask_start" [timeOnly]="true" [showTime]="true" appendTo="body"></p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{tarea.startDate * 1000 | date : 'HH:mm' : '+0000'}}
+                            </ng-template>
+                        </p-cellEditor>                        
+                    </td>
+                    <td class="text-center">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar [style]="{ width: '80px' }" (onInput)="blurDate($event)" [(ngModel)]="clonedTareas[tarea.id].editTask_end" [timeOnly]="true" [showTime]="true" appendTo="body"></p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                @if(tarea.endDate){
+                                    {{tarea.endDate * 1000 | date : 'HH:mm' : '+0000'}}
+                                }
+                            </ng-template>
+                        </p-cellEditor>                          
+                    </td>
+                    <td class="text-center">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-inputNumber [style]="{ width: '60px' }" [(ngModel)]="tarea.pause" mode="decimal" [useGrouping]="false"></p-inputNumber>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{tarea.pause}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        @if(!editing){
+                            <p-button (click)="confirmDelete($event, tarea.id)" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger "></p-button>
+                        } @else {
+                            <button pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(tarea)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                            <button pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(tarea, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                        }
+                    </td>
+                }
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td><p-dropdown [options]="desarrollos" [filter]="true" filterBy="ticket" appendTo="body" [(ngModel)]="newTask.idDesarrollo" optionValue="id" optionLabel="ticket" placeholder="Ticket"></p-dropdown></td>
+                @if(newTask.idDesarrollo){
+                    <td>{{indexedDesarrollos[newTask.idDesarrollo].Activo.name}}</td>
+                    <td>{{indexedDesarrollos[newTask.idDesarrollo].Desarrollo.title}}</td>
+                }
+                @else{
+                    <td></td>
+                    <td></td>
+                }
+                <td>
+                    <p-dropdown [options]="tipos" appendTo="body" [(ngModel)]="newTask.idTipoTarea" optionLabel="name" optionValue="id" placeholder="Tipo">
+                        <ng-template pTemplate="selectedItem">
+                            <p-badge [value]="indexedTipos[newTask.idTipoTarea]" [classList]="['badgeTarea'+newTask.idTipoTarea]"></p-badge>
+                        </ng-template>
+                        <ng-template let-tipo pTemplate="item">
+                            <p-badge [value]="tipo.name" [classList]="['badgeTarea'+tipo.id]"></p-badge>
+                        </ng-template>
+                    </p-dropdown>
+                </td>
+                <td><p-calendar [style]="{ width: '80px' }" (onInput)="blurDate($event)" [(ngModel)]="newTask_start" [timeOnly]="true" [showTime]="true" appendTo="body"></p-calendar></td>
+                <td><p-calendar [style]="{ width: '80px' }" (onInput)="blurDate($event)" [(ngModel)]="newTask_end" [timeOnly]="true" [showTime]="true" appendTo="body"></p-calendar></td>
+                <td><p-inputNumber [style]="{ width: '60px' }" [(ngModel)]="newTask.pause" mode="decimal" [useGrouping]="false"></p-inputNumber></td>
+                <td class="p-0 text-center"><button pButton pRipple type="button" icon="pi pi-check" (click)="saveNew()" class="p-button-rounded p-button-text p-button-success"></button></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

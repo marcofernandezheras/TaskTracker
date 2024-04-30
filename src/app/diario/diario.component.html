@@ -1,0 +1,25 @@
+<p-toast position="bottom-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<div class="flex h-screen-fixed diario mt-2" *ngIf="loaded">
+    <div class="bar flex flex-column mr-2 gap-2">
+        <p-toggleButton [(ngModel)]="activeSection.prev" onLabel="Anterior" offLabel="Ver anterior"></p-toggleButton>
+        <p-toggleButton [(ngModel)]="activeSection.today" onLabel="Hoy" offLabel="Hoy"></p-toggleButton>
+        <div class="relative">
+            <p-toggleButton [(ngModel)]="activeSection.todo" onLabel="Tareas" offLabel="Ver tareas"></p-toggleButton>
+            <p-badge [value]="taks.toString()" severity="warning" class="task-badge"></p-badge>
+        </div>
+    </div>
+    <div class="main flex-grow-1">
+        <div class="flex flex-column gap-4">
+            @if(activeSection.prev){
+                <app-lista-tareas class="flex-grow-1" [initialDay]="prevDay" [showCalendar]="true" [activos]="activos" [desarrollos]="desarrollos"></app-lista-tareas>
+            }
+            @if(activeSection.today){
+                <app-lista-tareas class="flex-grow-1" [initialDay]="hoy" [showCalendar]="false" [activos]="activos" [desarrollos]="desarrollos"></app-lista-tareas>
+            }
+            @if(activeSection.todo){
+                <app-lista-tareas-pendientes class="flex-grow-1"></app-lista-tareas-pendientes>
+            }
+        </div>
+    </div>
+</div>

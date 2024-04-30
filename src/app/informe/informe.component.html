@@ -1,0 +1,12 @@
+<div class="flex h-screen-fixed diario">
+    <div class="bar flex flex-column mr-2 gap-2 mt-2">
+        <p-toggleButton [(ngModel)]="activeSection.porDesarrollo" onLabel="Semanal" offLabel="Semanal"></p-toggleButton>        
+    </div>
+    <div class="main flex-grow-1">
+        <div class="flex flex-column gap-4">
+            @if(activeSection.porDesarrollo){
+                <app-informe-semanal></app-informe-semanal>
+            }
+        </div>
+    </div>
+</div>

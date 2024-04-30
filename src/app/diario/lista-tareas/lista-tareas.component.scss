@@ -1,0 +1,43 @@
+::ng-deep {
+    .p-inputnumber-input {
+        width: inherit;
+    }
+
+    .badgeTarea1 .p-badge {
+        background-color: var(--cyan-300) !important;
+        width: 100%;
+    }
+    
+    .badgeTarea2 .p-badge {
+        width: 100%;
+    }
+
+    .badgeTarea3 .p-badge {
+        background-color: var(--green-300) !important;
+        width: 100%;
+    }
+    
+    .badgeTarea4 .p-badge {
+        background-color: var(--yellow-300) !important;
+        width: 100%;
+    }
+    
+    .badgeTarea5 .p-badge {
+        background-color: var(--red-300) !important;
+        width: 100%;
+    }
+
+    tbody .p-button {
+        padding: 0;
+        height: 1.0rem;
+        width: 1rem;
+    }
+
+    tbody .pi-trash {
+        font-size: 10px;
+    }
+
+    td:has(.p-button){
+        text-align: center;
+    }
+}

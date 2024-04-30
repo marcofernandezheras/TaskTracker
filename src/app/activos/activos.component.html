@@ -1,0 +1,75 @@
+<p-toast></p-toast>
+<div class="h-screen-fixed">
+    <p-table #dt1  [value]="activos" dataKey="id" editMode="row" styleClass="p-datatable-striped p-datatable-sm w-full" 
+        [globalFilterFields]="['name']" [scrollable]="true" scrollHeight="flex">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <h3>Activos</h3>
+                <span class="p-input-icon-right ml-auto">
+                    <i class="pi pi-search" style="margin-top: -1.2rem;"></i>
+                    <input pInputText type="text" class="p-inputtext p-inputtext-sm" (input)="dt1.filterGlobal($event.target.value, 'contains')" />
+                </span> 
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Notas</th>
+                <th style="width: 150px;"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-activo let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="activo">
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" class="w-full" [(ngModel)]="activo.name" required>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{activo.name}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" class="w-full" [(ngModel)]="activo.notes" >
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{activo.notes}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        @if (!editing) {
+                            <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(activo)" class="p-button-rounded p-button-text p-button-sm"></button>
+                        }
+                        @else{
+                            <button pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(activo)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                            <button pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(activo, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                        }                    
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td>
+                    <input pInputText type="text" class="w-full" [(ngModel)]="newActivo.name" required>
+                </td>
+                <td>
+                    <input pInputText type="text" class="w-full" [(ngModel)]="newActivo.notes" >
+                </td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">                        
+                        <button pButton pRipple type="button" icon="pi pi-plus" (click)="onRowAddSave()" class="p-button-rounded p-button-text p-button-success mr-2"></button>                                            
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- <pre>{{activos | json}}</pre> -->

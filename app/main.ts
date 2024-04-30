@@ -1,10 +1,19 @@
-import {app, BrowserWindow, screen} from 'electron';
+import {app, BrowserWindow, screen, ipcMain, dialog} from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { DbManager, Manager } from './DBManager';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
+
+
+  async function handleFileOpen () {
+    const { canceled, filePaths } = await dialog.showOpenDialog({})
+    if (!canceled) {
+      return filePaths[0]
+    }
+  }
 
 function createWindow(): BrowserWindow {
 
@@ -17,9 +26,10 @@ function createWindow(): BrowserWindow {
     width: size.width,
     height: size.height,
     webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       allowRunningInsecureContent: (serve),
-      contextIsolation: false,
+      contextIsolation: true,
     },
   });
 
@@ -58,7 +68,62 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => setTimeout(createWindow, 400));
+  app.on('ready', () => { 
+    ipcMain.handle('dialog:openFile', handleFileOpen);
+
+    ipcMain.handle('db:activos:list', Manager.listActivos);
+    ipcMain.handle('db:activos:find', (e,a) => { 
+      return Manager.findActivos(a); 
+    });
+    ipcMain.handle('db:activos:insert', (e,a) => { 
+      return Manager.insertActivo(a); 
+    });
+    ipcMain.handle('db:activos:update', (e,a) => { 
+      return Manager.updateActivo(a); 
+    });
+    ipcMain.handle('db:activos:delete', (e,a) => { 
+      return Manager.deleteActivo(a); 
+    });
+
+
+    ipcMain.handle('db:desarrollos:list', Manager.listDesarrollos);
+    ipcMain.handle('db:desarrollos:find', (e,a) => { 
+      return Manager.findDesarrollo(a); 
+    });
+    ipcMain.handle('db:desarrollos:insert', (e,a) => { 
+      return Manager.insertDesarrollo(a); 
+    });
+    ipcMain.handle('db:desarrollos:update', (e,a) => { 
+      return Manager.updateDesarrollo(a); 
+    });
+    ipcMain.handle('db:desarrollos:delete', (e,a) => { 
+      return Manager.deleteDesarrollo(a); 
+    });
+
+    ipcMain.handle('db:tareas:tipos', Manager.listTipoTarea);
+
+    ipcMain.handle('db:tareas:list', (e,a) => {
+      return Manager.listTareas(a);
+    });
+    ipcMain.handle('db:tareas:find', (e,a) => { 
+      return Manager.findTareas(a); 
+    });
+    ipcMain.handle('db:tareas:insert', (e,a) => { 
+      return Manager.insertTarea(a); 
+    });
+    ipcMain.handle('db:tareas:update', (e,a) => { 
+      return Manager.updateTarea(a); 
+    });
+    ipcMain.handle('db:tareas:delete', (e,a) => { 
+      return Manager.deleteTarea(a); 
+    });
+
+    ipcMain.handle('db:informes:tareasPorDesarrollo', (e,a,b) => { 
+      return Manager.tareasPorDesarrollo(a,b); 
+    });
+
+    setTimeout(createWindow, 400)
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {

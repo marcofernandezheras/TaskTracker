@@ -1,0 +1,110 @@
+<p-toast></p-toast>
+<div class="h-screen-fixed">
+    <p-table #dt1  [value]="desarrollos" dataKey="id" editMode="row" styleClass="p-datatable-striped p-datatable-sm w-full" 
+        [globalFilterFields]="['name']" [scrollable]="true" scrollHeight="flex">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <h3>Desarrollos</h3>
+                <span class="p-input-icon-right ml-auto">
+                    <i class="pi pi-search" style="margin-top: -1.2rem;"></i>
+                    <input pInputText type="text" class="p-inputtext p-inputtext-sm" (input)="dt1.filterGlobal($event.target.value, 'contains')" />
+                </span> 
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Ticket</th>
+                <th>Activo</th>
+                <th>Titulo</th>
+                <th>Notas</th>
+                <th style="width: 150px;"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-desarrollo let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="desarrollo">
+                <td>                    
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" class="w-full" [(ngModel)]="desarrollo.ticket" required>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{desarrollo.ticket}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <!-- <input pInputText type="text" class="w-full" [(ngModel)]="desarrollo.idActivo" > -->
+                            <p-dropdown [options]="activos" appendTo="body" [(ngModel)]="desarrollo.idActivo" optionValue="id" optionLabel="name" placeholder="Activo"></p-dropdown>
+
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <!-- <p-dropdown [options]="activos" [readonly]="true" appendTo="body" [ngModel]="desarrollo.idActivo" optionValue="id" optionLabel="name"></p-dropdown> -->
+                            <p-chip [label]="indexedActivos[desarrollo.idActivo].name" ></p-chip>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" class="w-full" [(ngModel)]="desarrollo.title" >
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{desarrollo.title}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" class="w-full" [(ngModel)]="desarrollo.notes" >
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{desarrollo.notes}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        @if (!editing) {
+                            <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(desarrollo)" class="p-button-rounded p-button-text p-button-sm"></button>
+                        }
+                        @else{
+                            <button pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(desarrollo)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                            <button pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(desarrollo, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                        }                    
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td>
+                    <input pInputText type="text" class="w-full" [(ngModel)]="newDesarrollo.ticket" required>
+                </td>
+                <td>
+                    <!-- <input pInputText type="text" class="w-full" [(ngModel)]="newDesarrollo.idActivo" required> -->
+                    <p-dropdown [options]="activos" appendTo="body" [(ngModel)]="newDesarrollo.idActivo" optionValue="id" optionLabel="name" placeholder="Activo">                        
+                    </p-dropdown>
+                </td>
+                <td>
+                    <input pInputText type="text" class="w-full" [(ngModel)]="newDesarrollo.title" required>
+                </td>
+                <td>
+                    <input pInputText type="text" class="w-full" [(ngModel)]="newDesarrollo.notes" >
+                </td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">                        
+                        <button pButton pRipple type="button" icon="pi pi-plus" (click)="onRowAddSave()" class="p-button-rounded p-button-text p-button-success mr-2"></button>                                            
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- <pre>{{activos | json}}</pre> -->
+<!-- <pre>{{desarrollos | json}}</pre> -->
+<!-- <pre>{{indexedActivos | json}}</pre> -->

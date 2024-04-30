@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components';
 
-import { HomeRoutingModule } from './home/home-routing.module';
-import { DetailRoutingModule } from './detail/detail-routing.module';
+import { ActivosRoutingModule } from './activos/activos-routing.module';
+import { DesarrollosRoutingModule } from './desarrollos/desarrollos-routing.module';
+import { DiarioRoutingModule } from './diario/diario-routing.module';
+import { InformeRoutingModule } from './informe/informe-routing.module';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'activos',
     pathMatch: 'full'
   },
   {
@@ -20,8 +22,10 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {}),
-    HomeRoutingModule,
-    DetailRoutingModule
+    ActivosRoutingModule,
+    DesarrollosRoutingModule,
+    DiarioRoutingModule,
+    InformeRoutingModule
   ],
   exports: [RouterModule]
 })

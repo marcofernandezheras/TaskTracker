@@ -1,0 +1,14 @@
+::ng-deep{    
+
+    .bar .p-button-label {
+        writing-mode: vertical-lr;
+    }
+
+    .task-badge {
+        position: absolute;
+        left: -12px;
+        top: -5px;
+    }
+    
+}
+
