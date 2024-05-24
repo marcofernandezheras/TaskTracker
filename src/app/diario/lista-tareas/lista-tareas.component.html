@@ -17,6 +17,7 @@
                 <th style="width: 95px;">Inicio</th>
                 <th style="width: 95px;">Fin</th>
                 <th style="width: 95px;">Pausa</th>
+                <th>Notas</th>
                 <th style="width: 70px;"></th>
             </tr>
         </ng-template>
@@ -35,7 +36,7 @@
                         </p-cellEditor>
                     </td>
                     <td>{{indexedDesarrollos[tarea.idDesarrollo].Activo.name}}</td>
-                    <td>{{indexedDesarrollos[tarea.idDesarrollo].Desarrollo.title}}</td>
+                    <td [title]="indexedDesarrollos[tarea.idDesarrollo].Desarrollo.notes">{{indexedDesarrollos[tarea.idDesarrollo].Desarrollo.title}}</td>
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
@@ -86,6 +87,16 @@
                         </p-cellEditor>
                     </td>
                     <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" class="w-full" [(ngModel)]="tarea.notes" >
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{tarea.notes}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
                         @if(!editing){
                             <p-button (click)="confirmDelete($event, tarea.id)" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger "></p-button>
                         } @else {
@@ -121,6 +132,7 @@
                 <td><p-calendar [style]="{ width: '80px' }" (onInput)="blurDate($event)" [(ngModel)]="newTask_start" [timeOnly]="true" [showTime]="true" appendTo="body"></p-calendar></td>
                 <td><p-calendar [style]="{ width: '80px' }" (onInput)="blurDate($event)" [(ngModel)]="newTask_end" [timeOnly]="true" [showTime]="true" appendTo="body"></p-calendar></td>
                 <td><p-inputNumber [style]="{ width: '60px' }" [(ngModel)]="newTask.pause" mode="decimal" [useGrouping]="false"></p-inputNumber></td>
+                <td><input pInputText type="text" class="w-full" [(ngModel)]="newTask.notes" ></td>
                 <td class="p-0 text-center"><button pButton pRipple type="button" icon="pi pi-check" (click)="saveNew()" class="p-button-rounded p-button-text p-button-success"></button></td>
             </tr>
         </ng-template>

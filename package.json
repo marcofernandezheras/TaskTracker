@@ -27,7 +27,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
-    "start": "npm-run-all -p electron:serve ng:serve",
+    "start": "electron-forge start",
     "ng:serve": "ng serve -c web -o",
     "build": "npm run electron:serve-tsc && ng build --base-href ./",
     "build:dev": "npm run build -- -c dev",
@@ -44,7 +44,9 @@
     "e2e:show-trace": "playwright show-trace e2e/tracing/trace.zip",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
-    "rebuild": "electron-rebuild -f -w better-sqlite3"
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "@angular/animations": "17.0.8",
@@ -57,6 +59,7 @@
     "@angular/platform-browser-dynamic": "17.0.8",
     "@angular/router": "17.0.8",
     "better-sqlite3": "9.5.0",
+    "electron-squirrel-startup": "1.0.0",
     "primeflex": "3.3.1",
     "primeicons": "6.0.1",
     "primeng": "17.8.0",
@@ -75,6 +78,10 @@
     "@angular-eslint/template-parser": "17.1.1",
     "@angular/cli": "17.0.8",
     "@angular/compiler-cli": "17.0.8",
+    "@electron-forge/cli": "7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "7.4.0",
+    "@electron-forge/plugin-fuses": "7.4.0",
+    "@electron/fuses": "1.8.0",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@playwright/test": "1.40.1",
@@ -85,7 +92,6 @@
     "@typescript-eslint/parser": "6.16.0",
     "conventional-changelog-cli": "3.0.0",
     "electron": "27.2.0",
-    "electron-builder": "24.9.1",
     "electron-debug": "3.2.0",
     "electron-rebuild": "3.2.9",
     "electron-reloader": "1.2.3",
@@ -107,5 +113,11 @@
   },
   "browserslist": [
     "chrome 114"
-  ]
+  ],
+  "config": {
+    "forge": {
+      "makers": [],
+      "publishers": []
+    }
+  }
 }

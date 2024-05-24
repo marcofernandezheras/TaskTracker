@@ -3,6 +3,7 @@
 # compiled output
 /dist
 /tmp
+/out
 /out-tsc
 /app-builds
 /release
@@ -49,3 +50,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+db/task-tracker.db

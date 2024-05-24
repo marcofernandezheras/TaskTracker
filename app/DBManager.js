@@ -12,7 +12,7 @@ exports.Manager = {
         return query.get(id);
     },
     listActivos() {
-        const query = `SELECT id, name, notes FROM Activo;`;
+        const query = `SELECT id, name, notes FROM Activo order by name;`;
         const readQuery = db.prepare(query);
         return readQuery.all();
     },
@@ -38,7 +38,7 @@ exports.Manager = {
         return query.get(id);
     },
     listDesarrollos() {
-        const query = `SELECT id, idActivo, ticket, title, notes FROM Desarrollo;`;
+        const query = `SELECT id, idActivo, ticket, title, notes FROM Desarrollo  order by ticket;`;
         const readQuery = db.prepare(query);
         return readQuery.all();
     },
@@ -66,23 +66,23 @@ exports.Manager = {
     },
     listTareas(fecha) {
         let unixTimestamp = toUnixTime(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
-        const query = db.prepare(`SELECT id, idDesarrollo, idTipoTarea, startDate, endDate, pause FROM Tarea WHERE DATE(startDate,'unixepoch') = DATE(?,'unixepoch') ORDER BY startDate;`);
+        const query = db.prepare(`SELECT id, idDesarrollo, idTipoTarea, startDate, endDate, pause, notes FROM Tarea WHERE DATE(startDate,'unixepoch') = DATE(?,'unixepoch') ORDER BY startDate;`);
         return query.all(unixTimestamp);
     },
     findTareas: function (id) {
-        const query = db.prepare(`SELECT id, idDesarrollo, idTipoTarea, startDate, endDate, pause FROM Tarea WHERE id=?;`);
+        const query = db.prepare(`SELECT id, idDesarrollo, idTipoTarea, startDate, endDate, pause, notes FROM Tarea WHERE id=?;`);
         return query.get(id);
     },
     insertTarea: function (data) {
-        var _a, _b;
-        const query = db.prepare(`INSERT INTO Tarea (idDesarrollo, idTipoTarea, startDate, endDate, pause) VALUES(?, ?, ?, ?, ?);`);
-        const result = query.run(data.idDesarrollo, data.idTipoTarea, data.startDate, (_a = data.endDate) !== null && _a !== void 0 ? _a : null, (_b = data.pause) !== null && _b !== void 0 ? _b : null);
+        var _a, _b, _c;
+        const query = db.prepare(`INSERT INTO Tarea (idDesarrollo, idTipoTarea, startDate, endDate, pause, notes) VALUES(?, ?, ?, ?, ?, ?);`);
+        const result = query.run(data.idDesarrollo, data.idTipoTarea, data.startDate, (_a = data.endDate) !== null && _a !== void 0 ? _a : null, (_b = data.pause) !== null && _b !== void 0 ? _b : null, (_c = data.notes) !== null && _c !== void 0 ? _c : null);
         return result.lastInsertRowid;
     },
     updateTarea: function (data) {
-        var _a, _b;
-        const query = db.prepare(`UPDATE Tarea SET idDesarrollo=?, idTipoTarea=?, startDate=?, endDate=?, pause=? WHERE id=?;`);
-        const result = query.run(data.idDesarrollo, data.idTipoTarea, data.startDate, (_a = data.endDate) !== null && _a !== void 0 ? _a : null, (_b = data.pause) !== null && _b !== void 0 ? _b : null, data.id);
+        var _a, _b, _c;
+        const query = db.prepare(`UPDATE Tarea SET idDesarrollo=?, idTipoTarea=?, startDate=?, endDate=?, pause=?, notes=? WHERE id=?;`);
+        const result = query.run(data.idDesarrollo, data.idTipoTarea, data.startDate, (_a = data.endDate) !== null && _a !== void 0 ? _a : null, (_b = data.pause) !== null && _b !== void 0 ? _b : null, (_c = data.notes) !== null && _c !== void 0 ? _c : null, data.id);
         return result.changes === 1;
     },
     deleteTarea: function (id) {

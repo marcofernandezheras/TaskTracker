@@ -11,16 +11,18 @@ export class InformeSemanalComponent {
     month: WritableSignal<Date>;
     weeks: Array<{ start: Date, end: Date}> = [];
 
-    weekData: Array<{
-      plaiData: Array<TareaPorDesarrollo>,
-      total: number
-    }> = []
+    // weekData: Array<{
+    //   plainData: Array<TareaPorDesarrollo>,
+    //   total: number
+    // }> = []
 
-    cache: { [timestamp: number]: {
-                plaiData: Array<TareaPorDesarrollo>,
-                total: number
-              }
-    } = {}
+    weekData: Array<{
+      [index: number]: {
+        tickets: Array<string>,        
+        data: Array<TareaPorDesarrollo>,
+        total: number
+      }}> = []
+
 
     locale: Intl.LocalesArgument = 'es-ES'
     locale_options: Intl.DateTimeFormatOptions= {
@@ -71,18 +73,33 @@ export class InformeSemanalComponent {
     async weekOpen($event: AccordionTabOpenEvent){
       const {start, end} = {... this.weeks[$event.index]};
 
-      let timestamp = this.service.convertDateToUnixTime(start);
-      if(this.cache[timestamp]){
-        this.weekData[$event.index] = this.cache[timestamp];  
-      } else {
+        this.weekData[$event.index] = {};
         const plaiData = await window.electronAPI.db.informes.tareasPorDesarrolo(start, end);
-        const total = plaiData.reduce((t,i) => t + i.HoursConsumed, 0);
-        const weekItem = {
-          plaiData,
-          total
-        };
-        this.weekData[$event.index] = weekItem
-        this.cache[timestamp] = weekItem;
-      }
+
+        let temp = new Date();
+        temp.setDate(start.getDate());
+
+        const tickets = [...new Set(plaiData.reduce((t: Array<string>,i) => {t.push(i.Ticket); return t;} , []))];
+        this.weekData[$event.index][-1] = {
+          tickets: tickets,
+          data: [],
+          total : 0
+        }
+
+        while(temp <= end)
+        {
+          let str = temp.toISOString().substring(0,10)
+          const dayData = plaiData.filter(d => d.TaskDate === str);
+          const total = dayData.reduce((t,i) => t + i.HoursConsumed, 0);
+          
+          this.weekData[$event.index][temp.getDate()] = {
+            tickets: tickets,
+            data: dayData,
+            total : total
+          }
+
+          temp.setDate(temp.getDate() + 1);          
+        }
+      
     }
 }
