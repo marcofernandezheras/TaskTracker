@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="h-screen-fixed">
     <p-table #dt1  [value]="desarrollos" dataKey="id" editMode="row" styleClass="p-datatable-striped p-datatable-sm w-full" 
-        [globalFilterFields]="['name']" [scrollable]="true" scrollHeight="flex">
+        [globalFilterFields]="['ticket', 'title']" [scrollable]="true" scrollHeight="flex">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <h3>Desarrollos</h3>
@@ -36,7 +36,7 @@
                     <p-cellEditor>
                         <ng-template pTemplate="input">
                             <!-- <input pInputText type="text" class="w-full" [(ngModel)]="desarrollo.idActivo" > -->
-                            <p-dropdown [options]="activos" appendTo="body" [(ngModel)]="desarrollo.idActivo" optionValue="id" optionLabel="name" placeholder="Activo"></p-dropdown>
+                            <p-dropdown [options]="activos" [filter]="true" filterBy="name" appendTo="body" [(ngModel)]="desarrollo.idActivo" optionValue="id" optionLabel="name" placeholder="Activo"></p-dropdown>
 
                         </ng-template>
                         <ng-template pTemplate="output">
@@ -86,7 +86,7 @@
                 </td>
                 <td>
                     <!-- <input pInputText type="text" class="w-full" [(ngModel)]="newDesarrollo.idActivo" required> -->
-                    <p-dropdown [options]="activos" appendTo="body" [(ngModel)]="newDesarrollo.idActivo" optionValue="id" optionLabel="name" placeholder="Activo">                        
+                    <p-dropdown [options]="activos" [filter]="true" filterBy="name" appendTo="body" [(ngModel)]="newDesarrollo.idActivo" optionValue="id" optionLabel="name" placeholder="Activo">                        
                     </p-dropdown>
                 </td>
                 <td>

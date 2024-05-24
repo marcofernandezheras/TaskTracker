@@ -8,11 +8,12 @@ import { InformeSemanalComponent } from './informe-semanal/informe-semanal.compo
 import { CalendarModule } from 'primeng/calendar';
 import { AccordionModule } from 'primeng/accordion';
 import { TableModule } from 'primeng/table';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [InformeComponent, InformeSemanalComponent],
   imports: [
-    CommonModule, SharedModule, InformeRoutingModule, ToggleButtonModule, CalendarModule, AccordionModule, TableModule
+    CommonModule, SharedModule, InformeRoutingModule, ToggleButtonModule, CalendarModule, AccordionModule, TableModule, OverlayPanelModule
   ]
 })
 export class InformeModule { }

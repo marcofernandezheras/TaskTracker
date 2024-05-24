@@ -1,0 +1,11 @@
+::ng-deep {
+    tbody .p-button {
+        padding: 0;
+        height: 1.0rem;
+        width: 1rem;
+    }
+
+    tbody .p-button.p-button-sm .p-button-icon {
+        font-size: 10px !important;
+    }
+}

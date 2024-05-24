@@ -302,4 +302,5 @@ export interface TareaPorDesarrollo {
   Title: string;
   TaskDate: string;
   HoursConsumed: number;
+  notes: string;
 }

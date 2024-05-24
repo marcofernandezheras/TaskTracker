@@ -93,7 +93,7 @@ exports.Manager = {
     tareasPorDesarrollo: function (start, end) {
         let unixStartTimestamp = toUnixTime(start.getFullYear(), start.getMonth(), start.getDate());
         let unixEndTimestamp = toUnixTime(end.getFullYear(), end.getMonth(), end.getDate());
-        const query = db.prepare(`Select IdDesarrollo, Ticket, Title, TaskDate, HoursConsumed from TareasPorDesarrollo WHERE TaskDate >= DATE(?,'unixepoch') AND TaskDate <= DATE(?,'unixepoch') ORDER BY TaskDate, Ticket;`);
+        const query = db.prepare(`Select IdDesarrollo, Ticket, Title, TaskDate, HoursConsumed, notes from TareasPorDesarrollo WHERE TaskDate >= DATE(?,'unixepoch') AND TaskDate <= DATE(?,'unixepoch') ORDER BY TaskDate, Ticket;`);
         return query.all(unixStartTimestamp, unixEndTimestamp);
     }
 };

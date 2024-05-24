@@ -5,44 +5,85 @@
     </div>
 
     @if(!loadingWeeks){
+        <!-- <pre>{{weekData |json}}</pre> -->
     <p-accordion [multiple]="true" (onOpen)="weekOpen($event)">
         @for (w of weeks; track $index) {
         <p-accordionTab
             [header]="w.start.toLocaleDateString(locale, locale_options) + ' - ' + w.end.toLocaleDateString(locale, locale_options)">
-            @if(this.weekData[$index]){
-                <pre>{{this.weekData[$index] | json}}</pre>
-                @for(t of this.weekData[$index][-1].tickets; track $index)
-                {
-                    
-                }
-                <!--
-            <p-table [value]="this.weekData[$index].plaiData" dataKey="id"
+            @if(this.weekData[$index]){                
+            <p-table [value]="this.weekData[$index].data" dataKey="id"
                 styleClass="p-datatable-striped p-datatable-sm p-datatable-gridlines w-full" [scrollable]="true"
                 scrollHeight="flex">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 140px;">Ticket</th>
-                        <th>Titulo</th>
-                        <th style="width: 95px;">Consumido</th>
+                        <th>{{this.weekData[$index].days[0] | date: 'dd/MM/yyyy'}}</th>
+                        <th>{{this.weekData[$index].days[1] | date: 'dd/MM/yyyy'}}</th>
+                        <th>{{this.weekData[$index].days[2] | date: 'dd/MM/yyyy'}}</th>
+                        <th>{{this.weekData[$index].days[3] | date: 'dd/MM/yyyy'}}</th>
+                        <th>{{this.weekData[$index].days[4] | date: 'dd/MM/yyyy'}}</th>
+                        <th style="width: 95px;">Total</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-des>
                     <tr>
-                        <td>{{des | json}}</td>
-                        <td>{{des.Title}}</td>
-                        <td class="text-right">{{des.HoursConsumed}}</td>
+                        <td class="text-right" style="width: 140px;">{{des.ticket}}</td>
+                        <td (click)="op0.toggle($event)" class="text-right">@if(des.hours[0] > 0){<span>{{des.hours[0] | number : '1.2-2'}}</span>}</td>
+                        <td (click)="op1.toggle($event)" class="text-right">@if(des.hours[1] > 0){<span>{{des.hours[1] | number : '1.2-2'}}</span>}</td>
+                        <td (click)="op2.toggle($event)" class="text-right">@if(des.hours[2] > 0){<span>{{des.hours[2] | number : '1.2-2'}}</span>}</td>
+                        <td (click)="op3.toggle($event)" class="text-right">@if(des.hours[3] > 0){<span>{{des.hours[3] | number : '1.2-2'}}</span>}</td>
+                        <td (click)="op4.toggle($event)" class="text-right">@if(des.hours[4] > 0){<span>{{des.hours[4] | number : '1.2-2'}}</span>}</td>
+                        <td class="text-right" style="width: 95px;">{{des.hours.total | number : '1.2-2'}}</td>
+                        <p-overlayPanel #op0>
+                            <ul>
+                                @for (item of des.hours.Tip_0; track $index) {
+                                    <li>{{item}}</li>
+                                }
+                            </ul>                            
+                        </p-overlayPanel>
+                        <p-overlayPanel #op1>
+                            <ul>
+                                @for (item of des.hours.Tip_1; track $index) {
+                                    <li>{{item}}</li>
+                                }
+                            </ul>                            
+                        </p-overlayPanel>
+                        <p-overlayPanel #op2>
+                            <ul>
+                                @for (item of des.hours.Tip_2; track $index) {
+                                    <li>{{item}}</li>
+                                }
+                            </ul>                            
+                        </p-overlayPanel>
+                        <p-overlayPanel #op3>
+                            <ul>
+                                @for (item of des.hours.Tip_3; track $index) {
+                                    <li>{{item}}</li>
+                                }
+                            </ul>                            
+                        </p-overlayPanel>
+                        <p-overlayPanel #op4>
+                            <ul>
+                                @for (item of des.hours.Tip_4; track $index) {
+                                    <li>{{item}}</li>
+                                }
+                            </ul>                            
+                        </p-overlayPanel>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td colspan="3" class="text-right">
-                            {{this.weekData[$index].total}}
-                        </td>
+                        <td class="text-right" style="width: 140px;"></td>
+                        <td class="text-right">{{this.weekData[$index].totals[0] | number : '1.2-2'}}</td>
+                        <td class="text-right">{{this.weekData[$index].totals[1] | number : '1.2-2'}}</td>
+                        <td class="text-right">{{this.weekData[$index].totals[2] | number : '1.2-2'}}</td>
+                        <td class="text-right">{{this.weekData[$index].totals[3] | number : '1.2-2'}}</td>
+                        <td class="text-right">{{this.weekData[$index].totals[4] | number : '1.2-2'}}</td>
+                        <td class="text-right" style="width: 95px;">{{this.weekData[$index].totals.total | number : '1.2-2'}}</td>
                     </tr>
                 </ng-template>
             </p-table>
-            -->
             }
         </p-accordionTab>
         }
